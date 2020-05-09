@@ -60,7 +60,7 @@ var iconCodes = map[string]string{
 var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
 
 func (o *OpenWeatherMap) populateData() error {
-	var constructedURL string = owmURL + "lat=" + viper.GetString("__BRICK_LAT__") + "&lon=" + viper.GetString("__BRICK_LON__") + "&appid=" + viper.GetString("openweathermap.apikey")
+	var constructedURL string = owmURL + "lat=" + viper.GetString("__BRICK_LAT__") + "&lon=" + viper.GetString("__BRICK_LON__") + "&units=" + viper.GetString("__BRICK_UNIT__") + "&appid=" + viper.GetString("openweathermap.apikey")
 	resp, err := http.Get(constructedURL)
 	if err != nil {
 		return err
@@ -84,6 +84,6 @@ func (o OpenWeatherMap) CurrentWeather() (string, error) {
 		currentDescription = iconCodes[o.Current.Weather[0].Icon]
 	}
 
-	var currentWeather string = fmt.Sprintf("%s %0.2f", currentDescription, o.Current.Temp)
+	var currentWeather string = fmt.Sprintf("%s %0.2f%s", currentDescription, o.Current.Temp, viper.GetString("__BRICK_UNIT_NOTATION__"))
 	return currentWeather, nil
 }

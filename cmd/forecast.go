@@ -16,6 +16,15 @@ var forecastCmd = &cobra.Command{
 		} else {
 			viper.Set("__BRICK_TEXTUAL__", false)
 		}
+
+		imperial, _ := cmd.Flags().GetBool("imperial")
+		if imperial {
+			viper.Set("__BRICK_UNIT__", "imperial")
+			viper.Set("__BRICK_UNIT_NOTATION__", "°F")
+		} else {
+			viper.Set("__BRICK_UNIT__", "metric")
+			viper.Set("__BRICK_UNIT_NOTATION__", "°C")
+		}
 	},
 }
 
@@ -27,6 +36,7 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	forecastCmd.PersistentFlags().Bool("textual", false, "Show textual description instead of icons")
+	forecastCmd.PersistentFlags().Bool("imperial", false, "Use imperial system instead of metric")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
