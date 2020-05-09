@@ -1,7 +1,6 @@
 package provider
 
 import (
-	"brick/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -61,8 +60,6 @@ var iconCodes = map[string]string{
 var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
 
 func (o *OpenWeatherMap) populateData() error {
-	utils.GetPublicIPDetails()
-
 	var constructedURL string = owmURL + "lat=" + viper.GetString("__BRICK_LAT__") + "&lon=" + viper.GetString("__BRICK_LON__") + "&appid=" + viper.GetString("openweathermap.apikey")
 	resp, err := http.Get(constructedURL)
 	if err != nil {
