@@ -1,0 +1,4 @@
+---
+
+openweathermap:
+  apikey: your-owm-key-here
