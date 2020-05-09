@@ -36,6 +36,28 @@ type OpenWeatherMap struct {
 	} `json:"current"`
 }
 
+// Using nerd fonts for these icons
+var iconCodes = map[string]string{
+	"01d": "盛",
+	"01n": "",
+	"02d": "️",
+	"02n": "️",
+	"03d": "️",
+	"03n": "️",
+	"04d": "️",
+	"04n": "️",
+	"09d": "️",
+	"09n": "️",
+	"10d": "️",
+	"10n": "️",
+	"11d": "",
+	"11n": "",
+	"13d": "️",
+	"13n": "",
+	"50d": "",
+	"50n": "",
+}
+
 var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
 
 func (o *OpenWeatherMap) populateData() error {
@@ -57,6 +79,14 @@ func (o OpenWeatherMap) CurrentWeather() (string, error) {
 		return "", err
 	}
 
-	var currentWeather string = fmt.Sprintf("%s %0.2f", o.Current.Weather[0].Main, o.Current.Temp)
+	var currentDescription string
+
+	if viper.GetBool("__BRICK_TEXTUAL__") {
+		currentDescription = o.Current.Weather[0].Main
+	} else {
+		currentDescription = iconCodes[o.Current.Weather[0].Icon]
+	}
+
+	var currentWeather string = fmt.Sprintf("%s %0.2f", currentDescription, o.Current.Temp)
 	return currentWeather, nil
 }
