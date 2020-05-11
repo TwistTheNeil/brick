@@ -11,11 +11,7 @@ var forecastCmd = &cobra.Command{
 	Short: "Show the weather forecast",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		showText, _ := cmd.Flags().GetBool("textual")
-		if showText {
-			viper.Set("__BRICK_TEXTUAL__", true)
-		} else {
-			viper.Set("__BRICK_TEXTUAL__", false)
-		}
+		viper.Set("__BRICK_TEXTUAL__", showText)
 
 		imperial, _ := cmd.Flags().GetBool("imperial")
 		if imperial {
