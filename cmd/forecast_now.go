@@ -13,7 +13,12 @@ var nowCmd = &cobra.Command{
 	Short: "Show the current weather forecast",
 	Run: func(cmd *cobra.Command, args []string) {
 		var p provider.OpenWeatherMap
-		currentWeather, _ := p.CurrentWeather()
+
+		currentWeather, err := p.CurrentWeather()
+		if err != nil {
+			fmt.Println(err)
+		}
+
 		fmt.Println(currentWeather)
 	},
 }

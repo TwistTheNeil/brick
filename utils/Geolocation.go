@@ -9,7 +9,6 @@ import (
 
 // FreeGeoIPAppResponse defines the GET response from freegeoip.app
 type FreeGeoIPAppResponse struct {
-	IP        string  `json:"ip"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 }
@@ -27,8 +26,7 @@ func GetPublicIPDetails() error {
 
 	json.NewDecoder(resp.Body).Decode(&g)
 
-	viper.Set("__BRICK_IP__", g.IP)
-	viper.Set("__BRICK_LAT__", g.Latitude)
-	viper.Set("__BRICK_LON__", g.Longitude)
+	viper.Set("latitude", g.Latitude)
+	viper.Set("longitude", g.Longitude)
 	return nil
 }

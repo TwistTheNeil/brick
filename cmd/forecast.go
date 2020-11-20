@@ -11,15 +11,15 @@ var forecastCmd = &cobra.Command{
 	Short: "Show the weather forecast",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		showText, _ := cmd.Flags().GetBool("textual")
-		viper.Set("__BRICK_TEXTUAL__", showText)
+		viper.Set("textual", showText)
 
 		imperial, _ := cmd.Flags().GetBool("imperial")
 		if imperial {
-			viper.Set("__BRICK_UNIT__", "imperial")
-			viper.Set("__BRICK_UNIT_NOTATION__", "°F")
+			viper.Set("units", "imperial")
+			viper.Set("unit_notation", "°F")
 		} else {
-			viper.Set("__BRICK_UNIT__", "metric")
-			viper.Set("__BRICK_UNIT_NOTATION__", "°C")
+			viper.Set("units", "metric")
+			viper.Set("unit_notation", "°C")
 		}
 	},
 }
