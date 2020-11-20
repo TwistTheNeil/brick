@@ -1,8 +1,11 @@
 package provider
 
 import (
+	"brick/utils"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/spf13/viper"
@@ -60,13 +63,33 @@ var iconCodes = map[string]string{
 var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
 
 func (o *OpenWeatherMap) populateData() error {
+	if err := utils.GetPublicIPDetails(); err != nil {
+		return err
+	}
+
 	var constructedURL string = owmURL + "lat=" + viper.GetString("__BRICK_LAT__") + "&lon=" + viper.GetString("__BRICK_LON__") + "&units=" + viper.GetString("__BRICK_UNIT__") + "&appid=" + viper.GetString("openweathermap.apikey")
+
 	resp, err := http.Get(constructedURL)
 	if err != nil {
 		return err
 	}
 
-	json.NewDecoder(resp.Body).Decode(&o)
+	if resp.StatusCode%200 > 99 {
+		fmt.Println(resp)
+		return errors.New("Something went wrong")
+
+	}
+
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(bodyBytes, &o)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
