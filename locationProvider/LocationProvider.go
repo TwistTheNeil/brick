@@ -10,7 +10,14 @@ import (
 // services providing location data
 // such as latitude and longitude
 type LocationProvider interface {
-	GetPublicIPDetails() error
+	GetPublicIPDetails() (FlattenedProviderResponse, error)
+}
+
+// FlattenedProviderResponse is a flat representation
+// of location responses from various providers
+type FlattenedProviderResponse struct {
+	Latitude  float64
+	Longitude float64
 }
 
 // Selection of location provider

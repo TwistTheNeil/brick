@@ -65,11 +65,12 @@ func (o *OpenWeatherMap) populateData(units string) error {
 		return err
 	}
 
-	if err := locationProvider.GetPublicIPDetails(); err != nil {
+	location, err := locationProvider.GetPublicIPDetails()
+	if err != nil {
 		return err
 	}
 
-	var constructedURL string = owmURL + "lat=" + viper.GetString("latitude") + "&lon=" + viper.GetString("longitude") + "&units=" + units + "&appid=" + viper.GetString("openweathermap.apikey")
+	var constructedURL string = owmURL + "lat=" + fmt.Sprintf("%.4f", location.Latitude) + "&lon=" + fmt.Sprintf("%.4f", location.Longitude) + "&units=" + units + "&appid=" + viper.GetString("openweathermap.apikey")
 
 	err = utils.HTTPGet(constructedURL, &o)
 	if err != nil {

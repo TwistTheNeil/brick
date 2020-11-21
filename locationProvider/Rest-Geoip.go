@@ -17,13 +17,18 @@ type restGeoIPRepsonse struct {
 }
 
 // GetPublicIPDetails should get the public IP from a service
-func (r RestGeoIP) GetPublicIPDetails() error {
+func (r RestGeoIP) GetPublicIPDetails() (FlattenedProviderResponse, error) {
 	var standardResponse restGeoIPRepsonse
+	var returnResponse FlattenedProviderResponse
 
 	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse); err != nil {
-		return err
+		return returnResponse, err
 	}
-	viper.Set("latitude", standardResponse.Location.Latitude)
-	viper.Set("longitude", standardResponse.Location.Longitude)
-	return nil
+
+	returnResponse = FlattenedProviderResponse{
+		Latitude:  standardResponse.Location.Latitude,
+		Longitude: standardResponse.Location.Longitude,
+	}
+
+	return returnResponse, nil
 }
