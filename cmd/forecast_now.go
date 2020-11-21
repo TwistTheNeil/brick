@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	provider "brick/providers"
+	weatherprovider "brick/weatherProvider"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -12,7 +12,7 @@ var nowCmd = &cobra.Command{
 	Use:   "now",
 	Short: "Show the current weather forecast",
 	Run: func(cmd *cobra.Command, args []string) {
-		var p provider.OpenWeatherMap
+		var p weatherprovider.OpenWeatherMap
 
 		currentWeather, err := p.CurrentWeather()
 		if err != nil {

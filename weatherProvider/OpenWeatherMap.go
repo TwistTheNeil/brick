@@ -1,4 +1,4 @@
-package provider
+package weatherprovider
 
 import (
 	locationprovider "brick/locationProvider"
