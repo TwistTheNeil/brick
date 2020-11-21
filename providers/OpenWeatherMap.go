@@ -1,7 +1,7 @@
 package provider
 
 import (
-	"brick/utils"
+	locationprovider "brick/locationProvider"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -63,7 +63,12 @@ var iconCodes = map[string]string{
 var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
 
 func (o *OpenWeatherMap) populateData() error {
-	if err := utils.GetPublicIPDetails(); err != nil {
+	locationProvider, err := locationprovider.Selection()
+	if err != nil {
+		return err
+	}
+
+	if err := locationProvider.GetPublicIPDetails(); err != nil {
 		return err
 	}
 
