@@ -18,7 +18,9 @@ type freeGeoIPAppRepsonse struct {
 func (f FreeGeoIPApp) GetPublicIPDetails() error {
 	var standardResponse freeGeoIPAppRepsonse
 
-	utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse)
+	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse); err != nil {
+		return err
+	}
 	viper.Set("latitude", standardResponse.Latitude)
 	viper.Set("longitude", standardResponse.Longitude)
 	return nil

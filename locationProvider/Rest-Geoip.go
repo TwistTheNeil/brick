@@ -20,7 +20,9 @@ type restGeoIPRepsonse struct {
 func (r RestGeoIP) GetPublicIPDetails() error {
 	var standardResponse restGeoIPRepsonse
 
-	utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse)
+	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse); err != nil {
+		return err
+	}
 	viper.Set("latitude", standardResponse.Location.Latitude)
 	viper.Set("longitude", standardResponse.Location.Longitude)
 	return nil
