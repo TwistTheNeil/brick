@@ -43,7 +43,8 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	viper.SetDefault("locationprovider", "freegeoipapp")
+	viper.SetDefault("locationprovider.name", "freegeoipapp")
+	viper.SetDefault("locationprovider.url", "https://freegeoip.app/json/")
 
 	if cfgFile != "" {
 		// Use config file from the flag.

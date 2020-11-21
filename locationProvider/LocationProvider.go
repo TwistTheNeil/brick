@@ -17,7 +17,7 @@ type LocationProvider interface {
 func Selection() (LocationProvider, error) {
 	var provider LocationProvider
 
-	switch viper.GetString("locationprovider") {
+	switch viper.GetString("locationprovider.name") {
 	case "freegeoipapp":
 		provider = FreeGeoIPApp{}
 	case "restgeoip":
