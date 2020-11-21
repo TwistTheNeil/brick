@@ -2,11 +2,8 @@ package weatherprovider
 
 import (
 	locationprovider "brick/locationProvider"
-	"encoding/json"
-	"errors"
+	"brick/utils"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
 	"github.com/spf13/viper"
 )
@@ -74,23 +71,7 @@ func (o *OpenWeatherMap) populateData() error {
 
 	var constructedURL string = owmURL + "lat=" + viper.GetString("latitude") + "&lon=" + viper.GetString("longitude") + "&units=" + viper.GetString("units") + "&appid=" + viper.GetString("openweathermap.apikey")
 
-	resp, err := http.Get(constructedURL)
-	if err != nil {
-		return err
-	}
-
-	if resp.StatusCode%200 > 99 {
-		fmt.Println(resp)
-		return errors.New("Something went wrong")
-
-	}
-
-	bodyBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(bodyBytes, &o)
+	err = utils.HTTPGet(constructedURL, &o)
 	if err != nil {
 		return err
 	}
