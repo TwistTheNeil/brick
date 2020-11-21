@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
@@ -34,7 +34,9 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.brick.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/brick.yaml)")
+	rootCmd.PersistentFlags().Bool("textual", false, "Show textual description instead of icons")
+	rootCmd.PersistentFlags().Bool("imperial", false, "Use imperial system instead of metric")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -57,7 +59,7 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".brick" (without extension).
+		// Search config in home directory with name "brick" (without extension).
 		viper.AddConfigPath(home + "/.config/")
 		viper.SetConfigName("brick")
 	}

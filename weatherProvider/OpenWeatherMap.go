@@ -59,7 +59,7 @@ var iconCodes = map[string]string{
 
 var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
 
-func (o *OpenWeatherMap) populateData() error {
+func (o *OpenWeatherMap) populateData(units string) error {
 	locationProvider, err := locationprovider.Selection()
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func (o *OpenWeatherMap) populateData() error {
 		return err
 	}
 
-	var constructedURL string = owmURL + "lat=" + viper.GetString("latitude") + "&lon=" + viper.GetString("longitude") + "&units=" + viper.GetString("units") + "&appid=" + viper.GetString("openweathermap.apikey")
+	var constructedURL string = owmURL + "lat=" + viper.GetString("latitude") + "&lon=" + viper.GetString("longitude") + "&units=" + units + "&appid=" + viper.GetString("openweathermap.apikey")
 
 	err = utils.HTTPGet(constructedURL, &o)
 	if err != nil {
@@ -80,19 +80,24 @@ func (o *OpenWeatherMap) populateData() error {
 }
 
 // CurrentWeather returns a description about the current weather
-func (o OpenWeatherMap) CurrentWeather() (string, error) {
-	if err := o.populateData(); err != nil {
+func (o OpenWeatherMap) CurrentWeather(imperialSystem, textualOutput bool) (string, error) {
+	units := "metric"
+	if imperialSystem {
+		units = "imperial"
+	}
+
+	if err := o.populateData(units); err != nil {
 		return "", err
 	}
 
 	var currentDescription string
 
-	if viper.GetBool("textual") {
+	if textualOutput {
 		currentDescription = o.Current.Weather[0].Main
 	} else {
 		currentDescription = iconCodes[o.Current.Weather[0].Icon]
 	}
 
-	var currentWeather string = fmt.Sprintf("%s %0.2f%s", currentDescription, o.Current.Temp, viper.GetString("unit_notation"))
+	var currentWeather string = fmt.Sprintf("%s %0.2f%s", currentDescription, o.Current.Temp, utils.UnitNotation(units))
 	return currentWeather, nil
 }
