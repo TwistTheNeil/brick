@@ -9,7 +9,7 @@ import (
 // Maxmind service
 type Maxmind struct{}
 
-type restGeoIPRepsonse struct {
+type maxmindRepsonse struct {
 	Location struct {
 		Latitude  float64 `json:"Latitude"`
 		Longitude float64 `json:"Longitude"`
@@ -18,7 +18,7 @@ type restGeoIPRepsonse struct {
 
 // GetPublicIPDetails should get the public IP from a service
 func (m Maxmind) GetPublicIPDetails() (FlattenedProviderResponse, error) {
-	var standardResponse restGeoIPRepsonse
+	var standardResponse maxmindRepsonse
 	var returnResponse FlattenedProviderResponse
 
 	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse); err != nil {
