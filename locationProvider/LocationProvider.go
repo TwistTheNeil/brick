@@ -27,8 +27,8 @@ func Selection() (LocationProvider, error) {
 	switch viper.GetString("locationprovider.name") {
 	case "freegeoipapp":
 		provider = FreeGeoIPApp{}
-	case "restgeoip":
-		provider = RestGeoIP{}
+	case "maxmind":
+		provider = Maxmind{}
 	default:
 		return provider, errors.New("Unkown location provider")
 	}

@@ -5,9 +5,9 @@ locationprovider:
   name: "freegeoipapp"
   url: "https://freegeoip.app/json"
 
-# https://github.com/TwistTheNeil/rest-geoip
+# Maxmind api service provider
 # locationprovider:
-#   name: "restgeoip"
+#   name: "maxmind"
 #   url: "https://your.url/api/geoip"
 
 openweathermap:

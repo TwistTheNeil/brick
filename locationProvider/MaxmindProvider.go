@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// RestGeoIP geoip provider
-type RestGeoIP struct{}
+// Maxmind service
+type Maxmind struct{}
 
 type restGeoIPRepsonse struct {
 	Location struct {
@@ -17,7 +17,7 @@ type restGeoIPRepsonse struct {
 }
 
 // GetPublicIPDetails should get the public IP from a service
-func (r RestGeoIP) GetPublicIPDetails() (FlattenedProviderResponse, error) {
+func (m Maxmind) GetPublicIPDetails() (FlattenedProviderResponse, error) {
 	var standardResponse restGeoIPRepsonse
 	var returnResponse FlattenedProviderResponse
 
