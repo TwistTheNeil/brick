@@ -5,5 +5,6 @@ type Provider interface {
 	// Arguments:
 	//   - imperialSystem
 	//   - textual
-	CurrentWeather(bool, bool) string
+	CurrentWeatherShort(bool, bool) string
+	CurrentWeatherDetailed(bool, bool) string
 }

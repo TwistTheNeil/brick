@@ -80,8 +80,8 @@ func (o *OpenWeatherMap) populateData(units string) error {
 	return nil
 }
 
-// CurrentWeather returns a description about the current weather
-func (o OpenWeatherMap) CurrentWeather(imperialSystem, textualOutput bool) (string, error) {
+// CurrentWeatherShort returns a description about the current weather
+func (o OpenWeatherMap) CurrentWeatherShort(imperialSystem, textualOutput bool) (string, error) {
 	units := "metric"
 	if imperialSystem {
 		units = "imperial"
@@ -101,4 +101,47 @@ func (o OpenWeatherMap) CurrentWeather(imperialSystem, textualOutput bool) (stri
 
 	var currentWeather string = fmt.Sprintf("%s %0.2f%s", currentDescription, o.Current.Temp, utils.UnitNotation(units))
 	return currentWeather, nil
+}
+
+// CurrentWeatherDetailed returns a description about the current weather
+func (o OpenWeatherMap) CurrentWeatherDetailed(imperialSystem, textualOutput bool) (string, error) {
+	units := "metric"
+	if imperialSystem {
+		units = "imperial"
+	}
+
+	if err := o.populateData(units); err != nil {
+		return "", err
+	}
+
+	var currentDescription string
+
+	if textualOutput {
+		currentDescription = o.Current.Weather[0].Main
+	} else {
+		currentDescription = iconCodes[o.Current.Weather[0].Icon]
+	}
+
+	// var currentWeather string = fmt.Sprintf("%s %0.2f%s", currentDescription, o.Current.Temp, utils.UnitNotation(units))
+	currentWeather := utils.StringBuilder(
+		"Current weather\t", currentDescription, fmt.Sprintf(" %0.2f%s\n", o.Current.Temp, utils.UnitNotation(units)),
+		"Feels like\t", fmt.Sprintf("%0.2f%s\n", o.Current.FeelsLike, utils.UnitNotation(units)),
+		"Clouds\t", fmt.Sprintf("%d\n", o.Current.Clouds),
+		// "Sunrise\t", fmt.Sprintf("%s\n", time.Unix(o.Current.Sunrise, 0).String()),
+		// "Sunset\t", fmt.Sprintf("%s\n", time.Unix(o.Current.Sunset, 0).String()),
+		"Pressure\t", fmt.Sprintf("%d hPa\n", o.Current.Pressure),
+		"Humidity\t", fmt.Sprintf("%d%%\n", o.Current.Humidity),
+		"Dew point\t", fmt.Sprintf("%0.2f\n", o.Current.DewPoint),
+		"UVI\t", fmt.Sprintf("%0.2f\n", o.Current.UVI),
+		// TODO: m/s or mi/hr? need to fetch notation too
+		"Wind speed\t", fmt.Sprintf("%0.2f\n", o.Current.WindSpeed),
+		"Wind degree\t", fmt.Sprintf("%0.2f\n", o.Current.WindDegree),
+	)
+
+	tabulatedData, err := utils.Tabulate(currentWeather)
+	if err != nil {
+		return "", err
+	}
+
+	return tabulatedData, nil
 }

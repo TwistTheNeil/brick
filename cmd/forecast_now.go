@@ -16,10 +16,21 @@ var nowCmd = &cobra.Command{
 		var err error
 		var imperial, textual bool
 		var currentWeather string
+		detailed, err := cmd.Flags().GetBool("detailed")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
 		if imperial, err = cmd.Flags().GetBool("imperial"); err == nil {
 			if textual, err = cmd.Flags().GetBool("textual"); err == nil {
-				if currentWeather, err = p.CurrentWeather(imperial, textual); err == nil {
+				if detailed {
+					if currentWeather, err = p.CurrentWeatherDetailed(imperial, textual); err == nil {
+						fmt.Println(currentWeather)
+						return
+					}
+				}
+				if currentWeather, err = p.CurrentWeatherShort(imperial, textual); err == nil {
 					fmt.Println(currentWeather)
 				}
 			}
@@ -33,6 +44,7 @@ var nowCmd = &cobra.Command{
 
 func init() {
 	forecastCmd.AddCommand(nowCmd)
+	nowCmd.PersistentFlags().Bool("detailed", false, "Show detailed information about weather")
 
 	// Here you will define your flags and configuration settings.
 
