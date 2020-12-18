@@ -1,4 +1,4 @@
-package locationprovider
+package location
 
 import (
 	"brick/utils"

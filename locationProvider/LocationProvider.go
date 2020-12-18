@@ -1,4 +1,4 @@
-package locationprovider
+package location
 
 import (
 	"errors"
@@ -6,10 +6,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-// LocationProvider is an interface for
+// Provider is an interface for
 // services providing location data
 // such as latitude and longitude
-type LocationProvider interface {
+type Provider interface {
 	GetPublicIPDetails() (Location, error)
 }
 
@@ -20,8 +20,8 @@ type Location struct {
 }
 
 // Selection of location provider
-func Selection() (LocationProvider, error) {
-	var provider LocationProvider
+func Selection() (Provider, error) {
+	var provider Provider
 
 	switch viper.GetString("locationprovider.name") {
 	case "freegeoipapp":
