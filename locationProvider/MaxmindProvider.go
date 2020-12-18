@@ -17,18 +17,18 @@ type maxmindRepsonse struct {
 }
 
 // GetPublicIPDetails should get the public IP from a service
-func (m Maxmind) GetPublicIPDetails() (FlattenedProviderResponse, error) {
-	var standardResponse maxmindRepsonse
-	var returnResponse FlattenedProviderResponse
+func (m Maxmind) GetPublicIPDetails() (Location, error) {
+	var response maxmindRepsonse
+	var location Location
 
-	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse); err != nil {
-		return returnResponse, err
+	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &response); err != nil {
+		return location, err
 	}
 
-	returnResponse = FlattenedProviderResponse{
-		Latitude:  standardResponse.Location.Latitude,
-		Longitude: standardResponse.Location.Longitude,
+	location = Location{
+		Latitude:  response.Location.Latitude,
+		Longitude: response.Location.Longitude,
 	}
 
-	return returnResponse, nil
+	return location, nil
 }

@@ -15,18 +15,18 @@ type freeGeoIPAppRepsonse struct {
 }
 
 // GetPublicIPDetails should get the public IP from a service
-func (f FreeGeoIPApp) GetPublicIPDetails() (FlattenedProviderResponse, error) {
-	var standardResponse freeGeoIPAppRepsonse
-	var returnResponse FlattenedProviderResponse
+func (f FreeGeoIPApp) GetPublicIPDetails() (Location, error) {
+	var response freeGeoIPAppRepsonse
+	var location Location
 
-	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &standardResponse); err != nil {
-		return returnResponse, err
+	if err := utils.HTTPGet(viper.GetString("locationprovider.url"), &response); err != nil {
+		return location, err
 	}
 
-	returnResponse = FlattenedProviderResponse{
-		Latitude:  standardResponse.Latitude,
-		Longitude: standardResponse.Longitude,
+	location = Location{
+		Latitude:  response.Latitude,
+		Longitude: response.Longitude,
 	}
 
-	return returnResponse, nil
+	return location, nil
 }
