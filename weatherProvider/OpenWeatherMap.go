@@ -57,7 +57,7 @@ var iconCodes = map[string]string{
 	"50n": "",
 }
 
-var owmURL string = "https://api.openweathermap.org/data/2.5/onecall?"
+var owmURL string = "https://api.openweathermap.org/data/3.0/onecall?"
 
 func (o *OpenWeatherMap) populateData(units string) error {
 	locationProvider, err := locationprovider.Selection()
